@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/locall-common" />
             <option value="$PROJECT_DIR$/locall-framework" />
             <option value="$PROJECT_DIR$/locall-interpreter" />
+            <option value="$PROJECT_DIR$/locall-native" />
           </set>
         </option>
       </GradleProjectSettings>
