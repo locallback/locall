@@ -1,4 +1,4 @@
-package org.locallback.common;
+package org.locallback.annotation;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AnnotationUtils {
-
+public class AnnotationProcessor {
     /**
      * 获取指定包中使用指定注解的所有方法
      *

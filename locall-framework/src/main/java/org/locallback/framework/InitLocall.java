@@ -1,7 +1,7 @@
 package org.locallback.framework;
 
+import org.locallback.annotation.AnnotationProcessor;
 import org.locallback.annotation.LocallFunction;
-import org.locallback.common.AnnotationUtils;
 import org.locallback.common.exception.RepeatInitializeException;
 
 import java.lang.reflect.Method;
@@ -33,7 +33,7 @@ public class InitLocall {
     }
 
     private static void scanLocallFunctionAnnotation(String packageName) {
-        List<Method> locallFunctionMethods = AnnotationUtils.getAnnotatedMethods(LocallFunction.class, packageName);
+        List<Method> locallFunctionMethods = AnnotationProcessor.getAnnotatedMethods(LocallFunction.class, packageName);
         locallFunctionMethods.forEach(method -> method.setAccessible(true));
         locallContext.setAvailableMethodList(locallFunctionMethods);
     }
