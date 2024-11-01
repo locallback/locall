@@ -21,3 +21,9 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xuse-k2")
+    }
+}
