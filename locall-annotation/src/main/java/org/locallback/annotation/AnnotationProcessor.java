@@ -17,7 +17,7 @@ public class AnnotationProcessor {
      * @param packageName package name
      * @return list of methods
      */
-    public static List<Method> getAnnotatedMethods(Class<? extends Annotation> annotation, String packageName) {
+    public static List<Method> getAnnotatedMethods(Class<? extends Annotation> annotation, String... packageName) {
         List<Method> methods = new ArrayList<>();
         try (ScanResult scanResult = new ClassGraph()
                 .enableAllInfo()

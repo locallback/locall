@@ -20,7 +20,7 @@ public class InitLocall {
         init("org.locallback");
     }
 
-    public static void init(String packageName) {
+    public static void init(String... packageName) {
         verifyInit();
         scanLocallFunctionAnnotation(packageName);
     }
@@ -32,7 +32,7 @@ public class InitLocall {
         isInit = true;
     }
 
-    private static void scanLocallFunctionAnnotation(String packageName) {
+    private static void scanLocallFunctionAnnotation(String... packageName) {
         List<Method> locallFunctionMethods = AnnotationProcessor.getAnnotatedMethods(LocallFunction.class, packageName);
         locallFunctionMethods.forEach(method -> method.setAccessible(true));
         locallContext.setAvailableMethodList(locallFunctionMethods);
