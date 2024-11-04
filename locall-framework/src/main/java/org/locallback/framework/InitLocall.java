@@ -1,5 +1,7 @@
 package org.locallback.framework;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.locallback.annotation.AnnotationProcessor;
 import org.locallback.annotation.LocallFunction;
 import org.locallback.common.exception.RepeatInitializeException;
@@ -9,11 +11,12 @@ import java.util.List;
 
 public class InitLocall {
 
+    private static final Logger log = LogManager.getLogger();
+
     private static volatile boolean isInit = false;
     private static final LocallContext locallContext = LocallContext.getInstance();
 
     private InitLocall() {
-        throw new UnsupportedOperationException("Utility class");
     }
 
     public static void main(String[] args) {
@@ -34,7 +37,6 @@ public class InitLocall {
 
     private static void scanLocallFunctionAnnotation(String... packageName) {
         List<Method> locallFunctionMethods = AnnotationProcessor.getAnnotatedMethods(LocallFunction.class, packageName);
-        locallFunctionMethods.forEach(method -> method.setAccessible(true));
         locallContext.setAvailableMethodList(locallFunctionMethods);
     }
 
