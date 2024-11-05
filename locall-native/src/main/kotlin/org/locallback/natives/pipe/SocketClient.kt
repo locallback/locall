@@ -1,62 +1,40 @@
 package org.locallback.natives.pipe
 
-import java.io.BufferedReader
-import java.io.BufferedWriter
 import java.io.IOException
-import java.net.Socket
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import java.net.InetAddress
 
-class SocketClient(private val host: String, private val port: Int) : AutoCloseable {
-    private lateinit var socket: Socket
-    private lateinit var writer: BufferedWriter
-    private lateinit var reader: BufferedReader
+class SocketClient(host: String, private val port: Int) : AutoCloseable {
 
-    init {
-        connect()
-    }
-
-    private fun connect() {
-        while (true) {
-            try {
-                socket = Socket(host, port)
-                writer = socket.getOutputStream().bufferedWriter()
-                reader = socket.getInputStream().bufferedReader()
-                println("Connected to server $host:$port")
-                break
-            } catch (_: IOException) {
-                println("Failed to connect to server $host:$port, retrying...")
-                Thread.sleep(1000)
-            }
-        }
-    }
+    private val socket: DatagramSocket = DatagramSocket()
+    private val serverAddress: InetAddress = InetAddress.getByName(host)
 
     fun invoke(functionName: String, args: Array<out String>): String? {
-        if (socket.isClosed || !socket.isConnected) {
-            connect()
-        }
-
         val message = buildString {
             append("{\"function\": \"$functionName\", \"args\": [")
             append(args.joinToString(",") { "\"$it\"" })
             append("]}")
         }
 
-        writer.apply {
-            write(message)
-            newLine()
-            flush()
-        }
+        val sendData = message.toByteArray()
+        val sendPacket = DatagramPacket(sendData, sendData.size, serverAddress, port)
+        socket.send(sendPacket)
 
-        return reader.readLine()
+        val receiveData = ByteArray(2048)
+        val receivePacket = DatagramPacket(receiveData, receiveData.size)
+        return try {
+            socket.receive(receivePacket)
+            val response = String(receivePacket.data, 0, receivePacket.length)
+            response
+        } catch (e: IOException) {
+            println("Error receiving response: ${e.message}")
+            null
+        }
     }
 
     override fun close() {
-        try {
-            writer.close()
-            reader.close()
-            socket.close()
-            println("Disconnected from server.")
-        } catch (e: IOException) {
-            println("Error while closing resources: ${e.message}")
-        }
+        socket.close()
+        println("Socket closed.")
     }
 }
