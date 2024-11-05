@@ -10,7 +10,7 @@ class NativeBridge {
         }
 
         @JvmStatic
-        fun invoke(functionName: String, vararg args: String): String? {
+        suspend fun invoke(functionName: String, vararg args: String): String? {
             return try {
                 socketClient.invoke(functionName, args)
             } catch (e: Exception) {
