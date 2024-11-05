@@ -5,9 +5,10 @@ import org.apache.logging.log4j.Logger
 
 class NativeBridge {
 
-    val log: Logger = LogManager.getLogger("SocketClient")
-
     companion object {
+
+        private val log: Logger = LogManager.getLogger("NativeBridge")
+
         private val socketClient: Connexus by lazy {
             Connexus("127.0.0.1", 8081).also {
                 log.info("Socket client created")

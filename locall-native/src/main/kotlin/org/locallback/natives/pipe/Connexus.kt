@@ -12,9 +12,10 @@ import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
-val log: Logger = LogManager.getLogger("SocketClient")
-
 class Connexus(private val host: String, private val port: Int) : Closeable {
+
+    val log: Logger = LogManager.getLogger("SocketClient")
+
     private lateinit var socket: Socket
     private lateinit var writer: BufferedWriter
     private lateinit var reader: BufferedReader
