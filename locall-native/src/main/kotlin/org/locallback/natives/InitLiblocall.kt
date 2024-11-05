@@ -19,10 +19,10 @@ fun main() {
     repeat(10) {
         val arg1 = Random.nextInt(1, 100).toString()
         val arg2 = Random.nextInt(1, 100).toString()
-        val start = System.currentTimeMillis()
-        val response = NativeBridge.invoke("add", arrayOf(arg1, arg2))
-        val end = System.currentTimeMillis()
-        val deltaTime = end - start
+
+        val (response, deltaTime) = measureTime {
+            NativeBridge.invoke("add", arg1, arg2)
+        }
 
         results.add(response ?: "null")
         times.add(deltaTime)
@@ -32,4 +32,12 @@ fun main() {
     println(String.format("%-12s | %s |", "response:", results.joinToString(" | ")))
     println(String.format("%-12s | %s |", "delta_time:", times.joinToString(" | ")))
     println("------------------------------------------------")
+}
+
+inline fun <T> measureTime(block: () -> T): Pair<T?, Long> {
+    val start = System.currentTimeMillis()
+    val result = block()
+    val end = System.currentTimeMillis()
+    val deltaTime = end - start
+    return Pair(result, deltaTime)
 }

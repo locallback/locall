@@ -29,7 +29,7 @@ class SocketClient(private val host: String, private val port: Int) : AutoClosea
         }
     }
 
-    fun invoke(functionName: String, args: Array<String>): String? {
+    fun invoke(functionName: String, args: Array<out String>): String? {
         if (socket.isClosed || !socket.isConnected) {
             connect()
         }
