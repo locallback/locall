@@ -60,13 +60,3 @@ class SocketClient(private val host: String, private val port: Int) : AutoClosea
         }
     }
 }
-
-fun main() {
-    SocketClient("127.0.0.1", 8081).use { client ->
-        val response1 = client.invoke("add", arrayOf("10", "20"))
-        println("FunctionName: add, Response: $response1")
-
-        val response2 = client.invoke("subtract", arrayOf("30", "10"))
-        println("FunctionName: subtract, Response: $response2")
-    }
-}
