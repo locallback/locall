@@ -1,19 +1,23 @@
 package org.locallback.natives
 
 import kotlinx.coroutines.runBlocking
-import org.locallback.natives.pipe.NativeBridge
+import org.locallback.natives.pipe.NativeCallBridge
 import kotlin.random.Random
 
 class InitLiblocall {
 
     init {
-        System.loadLibrary("liblocall")
+        NativeCallBridge.init()
+//        System.loadLibrary("liblocall")
     }
 
     external fun initLiblocall()
 }
 
 fun main() = runBlocking {
+
+    InitLiblocall()
+
     val results = mutableListOf<String>()
     val times = mutableListOf<Long>()
 
@@ -23,7 +27,7 @@ fun main() = runBlocking {
 
         val (response, deltaTime) = measureTime {
             runBlocking {
-                NativeBridge.invoke("add", arg1, arg2)
+                NativeCallBridge.invoke("add", arg1, arg2)
             }
         }
 
