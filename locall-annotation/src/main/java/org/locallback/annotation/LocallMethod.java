@@ -10,8 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LocallMethod {
 
-    boolean enable() default true;
-
     String defaultParam() default "";
 
 }
