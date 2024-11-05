@@ -2,19 +2,37 @@ package org.locallback.natives.pipe
 
 import java.io.BufferedReader
 import java.io.BufferedWriter
+import java.io.IOException
 import java.net.Socket
 
 class SocketClient(private val host: String, private val port: Int) : AutoCloseable {
-    private val socket: Socket by lazy { Socket(host, port) }
-    private val writer: BufferedWriter by lazy { socket.getOutputStream().bufferedWriter() }
-    private val reader: BufferedReader by lazy { socket.getInputStream().bufferedReader() }
+    private lateinit var socket: Socket
+    private lateinit var writer: BufferedWriter
+    private lateinit var reader: BufferedReader
 
-    fun connect() {
-        println("Connected to server $host:$port")
+    init {
+        connect()
+    }
+
+    private fun connect() {
+        while (true) {
+            try {
+                socket = Socket(host, port)
+                writer = socket.getOutputStream().bufferedWriter()
+                reader = socket.getInputStream().bufferedReader()
+                println("Connected to server $host:$port")
+                break
+            } catch (_: IOException) {
+                println("Failed to connect to server $host:$port, retrying...")
+                Thread.sleep(1000)
+            }
+        }
     }
 
     fun invoke(functionName: String, args: Array<String>): String? {
-        check(!socket.isClosed) { "Socket is not connected. Please call connect() first." }
+        if (socket.isClosed || !socket.isConnected) {
+            connect()
+        }
 
         val message = buildString {
             append("{\"function\": \"$functionName\", \"args\": [")
@@ -32,18 +50,23 @@ class SocketClient(private val host: String, private val port: Int) : AutoClosea
     }
 
     override fun close() {
-        writer.close()
-        reader.close()
-        socket.close()
-        println("Disconnect server.")
+        try {
+            writer.close()
+            reader.close()
+            socket.close()
+            println("Disconnected from server.")
+        } catch (e: IOException) {
+            println("Error while closing resources: ${e.message}")
+        }
     }
 }
 
 fun main() {
     SocketClient("127.0.0.1", 8081).use { client ->
-        client.connect()
+        val response1 = client.invoke("add", arrayOf("10", "20"))
+        println("FunctionName: add, Response: $response1")
 
-        val response = client.invoke("add", arrayOf("10", "20"))
-        println("FunctionName: add, Response: $response")
+        val response2 = client.invoke("subtract", arrayOf("30", "10"))
+        println("FunctionName: subtract, Response: $response2")
     }
 }
