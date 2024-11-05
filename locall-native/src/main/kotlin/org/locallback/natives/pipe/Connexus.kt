@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger
 
 class Connexus(private val host: String, private val port: Int) : Closeable {
 
-    val log: Logger = LogManager.getLogger("SocketClient")
+    val log: Logger = LogManager.getLogger("Connexus")
 
     private lateinit var socket: Socket
     private lateinit var writer: BufferedWriter

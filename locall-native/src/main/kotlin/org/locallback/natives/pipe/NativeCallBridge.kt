@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger
 class NativeCallBridge {
 
     companion object {
-        private val log: Logger = LogManager.getLogger("SocketClient")
+        private val log: Logger = LogManager.getLogger("NativeCallBridge")
 
         @Volatile
         private var socketClient: Connexus? = null
@@ -21,8 +21,6 @@ class NativeCallBridge {
                         }
                     }
                 }
-            } else {
-                log.info("Socket client already initialized")
             }
         }
 
