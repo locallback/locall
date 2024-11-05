@@ -9,6 +9,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+
+val log: Logger = LogManager.getLogger("SocketClient")
 
 class SocketClient(private val host: String, private val port: Int) : Closeable {
     private lateinit var socket: Socket
@@ -25,10 +29,10 @@ class SocketClient(private val host: String, private val port: Int) : Closeable 
                 socket = Socket(host, port)
                 writer = socket.getOutputStream().bufferedWriter()
                 reader = socket.getInputStream().bufferedReader()
-                println("Connected to server $host:$port")
+                log.info("Connected to server $host:$port")
                 return@withContext
             } catch (e: IOException) {
-                println("Failed to connect to server (attempt ${attempt + 1}): ${e.message}")
+                log.error("Failed to connect to server (attempt ${attempt + 1}): ${e.message}")
                 if (attempt < retries - 1) {
                     delay(delayMillis)
                 } else {
@@ -62,6 +66,6 @@ class SocketClient(private val host: String, private val port: Int) : Closeable 
         writer.close()
         reader.close()
         socket.close()
-        println("Disconnected from server.")
+        log.info("Disconnected from server.")
     }
 }

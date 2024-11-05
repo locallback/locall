@@ -1,11 +1,16 @@
 package org.locallback.natives.pipe
 
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+
 class NativeBridge {
+
+    val log: Logger = LogManager.getLogger("SocketClient")
 
     companion object {
         private val socketClient: SocketClient by lazy {
             SocketClient("127.0.0.1", 8081).also {
-                println("Socket client created")
+                log.info("Socket client created")
             }
         }
 
@@ -14,7 +19,7 @@ class NativeBridge {
             return try {
                 socketClient.invoke(functionName, args)
             } catch (e: Exception) {
-                println("Error invoking function: ${e.message}")
+                log.error("Error invoking function: ${e.message}")
                 null
             }
         }
