@@ -21,6 +21,7 @@ public class AnnotationProcessor {
     public static List<Method> getAnnotatedMethods(Class<? extends Annotation> annotation,
                                                    String... packageName) {
         List<Method> methods = new ArrayList<>();
+
         try (ScanResult scanResult = new ClassGraph()
                 .enableAllInfo()
                 .acceptPackages(packageName)
@@ -29,14 +30,33 @@ public class AnnotationProcessor {
             scanResult.getAllClasses().forEach(classInfo -> {
                 Class<?> clazz = classInfo.loadClass();
                 Arrays.stream(clazz.getDeclaredMethods())
-                        .filter(method -> method.isAnnotationPresent(annotation))
+                        .filter(method -> isIncludedAnnotation(annotation, clazz, method)
+                                && !isExcludedAnnotation(clazz, method))
                         .peek(method -> method.setAccessible(true))
                         .forEach(methods::add);
             });
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
         return methods;
+    }
+
+    private static boolean isIncludedAnnotation(Class<? extends Annotation> annotation, Class<?> clazz,
+                                                Method method) {
+        return clazz.isAnnotationPresent(annotation) || method.isAnnotationPresent(annotation);
+    }
+
+    private static boolean isExcludedAnnotation(Class<?> clazz, Method method) {
+        Exclude exclude = method.getAnnotation(Exclude.class);
+
+        if (exclude == null || exclude.annotation().length == 0) {
+            return exclude != null;
+        }
+
+        return Arrays.stream(exclude.annotation()).anyMatch(excludeAnnotation ->
+                method.isAnnotationPresent(excludeAnnotation) || clazz.isAnnotationPresent(excludeAnnotation)
+        );
     }
 
 }

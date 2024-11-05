@@ -13,7 +13,7 @@ public class LocallContext {
     private LocallContext() {
     }
 
-    public static LocallContext getInstance() {
+    public static LocallContext getContext() {
         if (INSTANCE == null) {
             synchronized (LocallContext.class) {
                 if (INSTANCE == null) {
@@ -26,7 +26,7 @@ public class LocallContext {
 
     /* 可用方法列表 */
     private final List<Method> availableMethodList = new ArrayList<>();
-
+    /* 可用方法Map */
     private final Map<String, Method> availableMethodMap = new HashMap<>();
 
     protected List<Method> getAvailableMethodList() {
