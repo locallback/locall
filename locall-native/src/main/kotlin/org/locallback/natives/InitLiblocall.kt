@@ -7,7 +7,7 @@ import kotlin.random.Random
 class InitLiblocall {
 
     init {
-        NativeCallBridge.init()
+
 //        System.loadLibrary("liblocall")
     }
 
@@ -15,9 +15,8 @@ class InitLiblocall {
 }
 
 fun main() = runBlocking {
-
-    InitLiblocall()
-
+//    InitLiblocall()
+    val bridge1 = NativeCallBridge("127.0.0.1", 8081)
     val results = mutableListOf<String>()
     val times = mutableListOf<Long>()
 
@@ -27,7 +26,31 @@ fun main() = runBlocking {
 
         val (response, deltaTime) = measureTime {
             runBlocking {
-                NativeCallBridge.invoke("add", arg1, arg2)
+                bridge1.invoke("add", arg1, arg2)
+            }
+        }
+
+        results.add(response ?: "null")
+        times.add(deltaTime)
+    }
+
+    println("------------------------------------------------")
+    println(String.format("%-12s | %s |", "response:", results.joinToString(" | ")))
+    println(String.format("%-12s | %s |", "delta_time:", times.joinToString(" | ")))
+    println("------------------------------------------------")
+
+    results.clear()
+    times.clear()
+
+    val bridge2 = NativeCallBridge("192.168.1.100", 8082)
+
+    repeat(10) {
+        val arg1 = Random.nextInt(1, 100).toString()
+        val arg2 = Random.nextInt(1, 100).toString()
+
+        val (response, deltaTime) = measureTime {
+            runBlocking {
+                bridge2.invoke("add", arg1, arg2)
             }
         }
 
