@@ -1,7 +1,8 @@
 package org.locallback.natives
 
 import kotlinx.coroutines.runBlocking
-import org.locallback.natives.pipe.NativeCallBridge
+import org.locallback.natives.pipe.NativeCallBridgeFactory
+import java.lang.Thread.sleep
 import kotlin.random.Random
 
 class InitLiblocall {
@@ -15,8 +16,8 @@ class InitLiblocall {
 }
 
 fun main() = runBlocking {
-//    InitLiblocall()
-    val bridge1 = NativeCallBridge("127.0.0.1", 8081)
+
+    val bridge1 = NativeCallBridgeFactory.create("127.0.0.1", 8081)
     val results = mutableListOf<String>()
     val times = mutableListOf<Long>()
 
@@ -26,7 +27,7 @@ fun main() = runBlocking {
 
         val (response, deltaTime) = measureTime {
             runBlocking {
-                bridge1.invoke("add", arg1, arg2)
+                bridge1.call("add", arg1, arg2)
             }
         }
 
@@ -42,7 +43,8 @@ fun main() = runBlocking {
     results.clear()
     times.clear()
 
-    val bridge2 = NativeCallBridge("192.168.1.100", 8082)
+    sleep(1000)
+    val bridge2 = NativeCallBridgeFactory.create("127.0.0.1", 8082)
 
     repeat(10) {
         val arg1 = Random.nextInt(1, 100).toString()
@@ -50,7 +52,7 @@ fun main() = runBlocking {
 
         val (response, deltaTime) = measureTime {
             runBlocking {
-                bridge2.invoke("add", arg1, arg2)
+                bridge2.call("add", arg1, arg2)
             }
         }
 
