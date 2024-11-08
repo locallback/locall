@@ -19,7 +19,7 @@ object NativeCallBridgeFactory {
 class NativeCallBridge private constructor(private val ip: String, private val port: Int) {
 
     private val log: Logger = LogManager.getLogger("NativeCallBridge")
-    private val socketClient: Connexus = Connexus(ip, port).also {
+    private val connexus: Connexus = Connexus(ip, port).also {
         log.info("NativeCallBridge created, IP: $ip Port: $port")
     }
 
@@ -29,7 +29,7 @@ class NativeCallBridge private constructor(private val ip: String, private val p
 
     suspend fun call(functionName: String, vararg args: String): String? {
         return try {
-            socketClient.invoke(functionName, args)
+            connexus.send(functionName, args)
         } catch (e: Exception) {
             log.error("Error calling function: ${e.message}")
             null

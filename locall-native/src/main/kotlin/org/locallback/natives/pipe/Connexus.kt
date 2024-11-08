@@ -42,7 +42,7 @@ class Connexus(private val host: String, private val port: Int) : Closeable {
         }
     }
 
-    suspend fun invoke(functionName: String, args: Array<out String>): String? = withContext(Dispatchers.IO) {
+    suspend fun send(functionName: String, args: Array<out String>): String? = withContext(Dispatchers.IO) {
         if (socket?.isClosed != false || socket?.isConnected != true) connect()
 
         val message = buildJsonMessage(functionName, args)
