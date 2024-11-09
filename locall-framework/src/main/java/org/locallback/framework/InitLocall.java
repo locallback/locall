@@ -20,10 +20,10 @@ public class InitLocall {
     private InitLocall() {
     }
 
-    public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
+    public static void main(String[] args) {
         init("org.locallback");
-        Invoker<String> invoker = new Invoker<>();
-        String test = invoker.invokeMethod("test");
+        Caller<String> caller = new Caller<>();
+        String test = caller.callMethod("test");
         System.out.println(test);
     }
 

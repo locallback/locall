@@ -57,7 +57,7 @@ public class LocallContext {
      * @param fullMethodName 完整方法名 包名.类名#方法名
      * @return Method
      */
-    public Method getAvailableMethod(String fullMethodName) {
+    public Method getMethod(String fullMethodName) {
         return availableMethodMap.get(fullMethodName);
     }
 
