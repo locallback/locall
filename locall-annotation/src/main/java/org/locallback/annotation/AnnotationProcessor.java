@@ -11,15 +11,19 @@ import java.util.List;
 
 public class AnnotationProcessor {
 
+    Class<? extends Annotation> annotation;
+
+    public AnnotationProcessor(Class<? extends Annotation> annotation) {
+        this.annotation = annotation;
+    }
+
     /**
      * 获取指定包中使用指定注解的所有方法
      *
-     * @param annotation  annotation class
      * @param packageName package name
      * @return list of methods
      */
-    public static List<Method> getAnnotatedMethods(Class<? extends Annotation> annotation,
-                                                   String... packageName) {
+    public List<Method> getAnnotatedMethods(String... packageName) {
         List<Method> methods = new ArrayList<>();
 
         try (ScanResult scanResult = new ClassGraph()
@@ -42,12 +46,12 @@ public class AnnotationProcessor {
         return methods;
     }
 
-    private static boolean isIncludedAnnotation(Class<? extends Annotation> annotation, Class<?> clazz,
-                                                Method method) {
+    private boolean isIncludedAnnotation(Class<? extends Annotation> annotation, Class<?> clazz,
+                                         Method method) {
         return clazz.isAnnotationPresent(annotation) || method.isAnnotationPresent(annotation);
     }
 
-    private static boolean isExcludedAnnotation(Class<?> clazz, Method method) {
+    private boolean isExcludedAnnotation(Class<?> clazz, Method method) {
         Exclude exclude = method.getAnnotation(Exclude.class);
 
         if (exclude == null || exclude.annotation().length == 0) {
