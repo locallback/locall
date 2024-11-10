@@ -26,10 +26,16 @@ public class CallCache {
         return INSTANCE;
     }
 
+    /**
+     * 生成缓存方法调用缓存的key
+     */
     public static String getCacheKey(Method method, Object... args) {
         return String.format(CACHE_KEY, method.getName(), Arrays.toString(args));
     }
 
+    /**
+     * 获取方法调用缓存
+     */
     public Object get(String key) {
         return callCacheMap.get(key);
     }
@@ -38,10 +44,16 @@ public class CallCache {
         callCacheMap.put(key, value);
     }
 
+    /**
+     * 添加被标记为可缓存方法
+     */
     public void addLocallCachedMethod(String methodName) {
         locallCachedMethodList.add(methodName);
     }
 
+    /**
+     * 判断方法是否被标记为可缓存方法
+     */
     public boolean isLocallCachedMethod(String methodName) {
         return locallCachedMethodList.contains(methodName);
     }
