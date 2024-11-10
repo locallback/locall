@@ -27,6 +27,7 @@ public class InitLocall {
         verifyInit();
         scanLocallFunctionAnnotation(packageName);
         scanLocallCacheAnnotation(packageName);
+        log.info("Locall-framework initialization completed.");
     }
 
     private synchronized static void verifyInit() {
