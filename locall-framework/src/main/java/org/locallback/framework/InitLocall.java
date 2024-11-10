@@ -22,8 +22,10 @@ public class InitLocall {
     public static void main(String[] args) {
         init("org.locallback");
         Caller<String> caller = new Caller<>();
-        String test = caller.callMethod("test");
-        System.out.println(test);
+        String test = caller.callMethod("test1", "test1");
+        String te = caller.callMethod("test1", "test1");
+        System.out.println(test==null);
+        System.out.println(te==null);
     }
 
     public static void init(String... packageName) {
@@ -39,9 +41,9 @@ public class InitLocall {
     }
 
     private static void scanLocallFunctionAnnotation(String... packageName) {
-        AnnotationProcessor annotationProcessor = new AnnotationProcessor(LocallFunction.class);
-        List<Method> locallFunctionMethods = annotationProcessor.getAnnotatedMethods(packageName);
-        locallContext.registerAvailableMethodList(locallFunctionMethods);
+        AnnotationProcessor processor = new AnnotationProcessor(LocallFunction.class);
+        List<Method> methodList = processor.getAnnotatedMethods(packageName);
+        locallContext.registerAvailableMethodList(methodList);
     }
 
 }
