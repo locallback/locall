@@ -1,6 +1,6 @@
 package org.locallback.common.exception;
 
-public class RepeatInitializeException extends RuntimeException {
+public class RepeatInitializeException extends LocallException {
 
     public RepeatInitializeException() {
         super("Locall framework has already been initialized and cannot be initialized again.");
