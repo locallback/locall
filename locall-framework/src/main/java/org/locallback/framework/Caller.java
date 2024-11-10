@@ -14,10 +14,13 @@ public class Caller<T> {
     private final LocallContext locallContext = LocallContext.getContext();
     private final Map<String, Object> callCache = new HashMap<>();
 
+    private static final String CACHE_SEPARATOR = "#";
+    private static final String CACHE_KEY = "%s" + CACHE_SEPARATOR + "%s";
+
     @SuppressWarnings("unchecked")
     public T callMethod(String methodName, Object... args) {
         Method method = locallContext.getMethod(methodName);
-        Object o = callCache.get(method.getName() + Arrays.toString(args));
+        Object o = callCache.get(cacheKey(method, args));
         if (o != null) {
             if (o == CacheEnum.NULL) return null;
             return (T) o;
@@ -26,13 +29,17 @@ public class Caller<T> {
         try {
             Object instance = method.getDeclaringClass().getDeclaredConstructor().newInstance();
             Object result = method.invoke(instance, args);
-            callCache.put(method.getName() + Arrays.toString(args), Objects.requireNonNullElse(result, CacheEnum.NULL));
+            callCache.put(cacheKey(method, args), Objects.requireNonNullElse(result, CacheEnum.NULL));
 
             return (T) result;
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException |
                  InstantiationException e) {
             throw new RuntimeException("Error invoking method: " + methodName, e);
         }
+    }
+
+    private String cacheKey(Method method, Object... args) {
+        return String.format(CACHE_KEY, method.getName(), Arrays.toString(args));
     }
 
 }
