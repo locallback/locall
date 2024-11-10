@@ -1,4 +1,4 @@
-package org.locallback.framework;
+package org.locallback.framework.context;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class LocallContext {
     /* 可用方法Map */
     private final Map<String, Method> availableMethodMap = new HashMap<>();
 
-    protected void registerAvailableMethodList(List<Method> availableMethodList) {
+    public void registerAvailableMethodList(List<Method> availableMethodList) {
         availableMethodList.forEach(this::registerAvailableMethod);
     }
 
@@ -39,7 +39,7 @@ public class LocallContext {
      *
      * @param method AvailableMethod
      */
-    protected void registerAvailableMethod(Method method) {
+    public void registerAvailableMethod(Method method) {
         synchronized (this) {
             availableMethodList.add(method);
             availableMethodMap.put(method.getName(), method);
@@ -57,7 +57,7 @@ public class LocallContext {
         return availableMethodMap.get(fullMethodName);
     }
 
-    protected List<Method> getAvailableMethodList() {
+    public List<Method> getAvailableMethodList() {
         return availableMethodList;
     }
 

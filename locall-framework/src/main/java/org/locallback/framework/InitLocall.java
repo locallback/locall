@@ -6,6 +6,8 @@ import org.locallback.annotation.AnnotationProcessor;
 import org.locallback.annotation.LocallCache;
 import org.locallback.annotation.LocallFunction;
 import org.locallback.common.exception.RepeatInitializeException;
+import org.locallback.framework.call.CallCache;
+import org.locallback.framework.context.LocallContext;
 
 import java.lang.reflect.Method;
 import java.util.List;
