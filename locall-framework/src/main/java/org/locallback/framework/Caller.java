@@ -69,7 +69,7 @@ public class Caller<T> {
             return (T) result;
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException |
                  InstantiationException e) {
-            throw new RuntimeException("Error invoking method: " + methodName, e);
+            throw new LocallException("Error invoking method: " + methodName, e);
         }
     }
 
