@@ -12,6 +12,14 @@ public class LocallConfig {
      */
     public static boolean enableCallCache = false;
 
+    public static String ip = "127.0.0.1";
+    public static int port = 18232;
+
+    public static void setConnexusConfig(String ip, int port) {
+        LocallConfig.ip = ip;
+        LocallConfig.port = port;
+    }
+
     public static void enableCallCache() {
         LocallConfig.enableCallCache = true;
     }

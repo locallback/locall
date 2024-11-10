@@ -27,11 +27,11 @@ fun main() = runBlocking {
 
         val (response, deltaTime) = measureTime {
             runBlocking {
-                bridge1.call("add", arg1, arg2)
+//                bridge1.call("add", arg1, arg2)
             }
         }
 
-        results.add(response ?: "null")
+//        results.add(response ?: "null")
         times.add(deltaTime)
     }
 
@@ -42,28 +42,28 @@ fun main() = runBlocking {
 
     results.clear()
     times.clear()
-
-    sleep(1000)
-    val bridge2 = NativeCallBridgeFactory.create("127.0.0.1", 8082)
-
-    repeat(10) {
-        val arg1 = Random.nextInt(1, 100).toString()
-        val arg2 = Random.nextInt(1, 100).toString()
-
-        val (response, deltaTime) = measureTime {
-            runBlocking {
-                bridge2.call("add", arg1, arg2)
-            }
-        }
-
-        results.add(response ?: "null")
-        times.add(deltaTime)
-    }
-
-    println("------------------------------------------------")
-    println(String.format("%-12s | %s |", "response:", results.joinToString(" | ")))
-    println(String.format("%-12s | %s |", "delta_time:", times.joinToString(" | ")))
-    println("------------------------------------------------")
+//
+//    sleep(1000)
+//    val bridge2 = NativeCallBridgeFactory.create("127.0.0.1", 8082)
+//
+//    repeat(10) {
+//        val arg1 = Random.nextInt(1, 100).toString()
+//        val arg2 = Random.nextInt(1, 100).toString()
+//
+//        val (response, deltaTime) = measureTime {
+//            runBlocking {
+//                bridge2.call("add", arg1, arg2)
+//            }
+//        }
+//
+//        results.add(response ?: "null")
+//        times.add(deltaTime)
+//    }
+//
+//    println("------------------------------------------------")
+//    println(String.format("%-12s | %s |", "response:", results.joinToString(" | ")))
+//    println(String.format("%-12s | %s |", "delta_time:", times.joinToString(" | ")))
+//    println("------------------------------------------------")
 }
 
 inline fun <T> measureTime(block: () -> T): Pair<T?, Long> {

@@ -1,5 +1,6 @@
 package org.locallback.natives.pipe
 
+import kotlinx.coroutines.runBlocking
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
@@ -27,9 +28,12 @@ class NativeCallBridge private constructor(private val ip: String, private val p
         fun newInstance(ip: String, port: Int): NativeCallBridge = NativeCallBridge(ip, port)
     }
 
-    suspend fun call(functionName: String, vararg args: String): String? {
+    fun call(functionName: String, args: Array<out String>): String? {
         return try {
-            connexus.send(functionName, args)
+            // TODO: 待优化
+            runBlocking {
+                connexus.send(functionName, args)
+            }
         } catch (e: Exception) {
             log.error("Error calling function: ${e.message}")
             null

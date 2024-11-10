@@ -13,7 +13,7 @@ import java.util.List;
 
 public class InitLocall {
 
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger(InitLocall.class);
 
     private static volatile boolean isInit = false;
     private static final LocallContext locallContext = LocallContext.getContext();
@@ -25,15 +25,12 @@ public class InitLocall {
     public static void main(String[] args) {
         init("org.locallback");
         LocallConfig.enableCallCache();
-        Caller<String> caller = new Caller<>();
-        long start = System.currentTimeMillis();
-        String findPrimes = caller.callMethod("findPrimes", "10000000");
-        long end = System.currentTimeMillis();
-        System.out.println("未命中缓存 运行耗时: " + (end - start) + "ms");
-        long start1 = System.currentTimeMillis();
-        caller.callMethod("findPrimes", "10000000");
-        long end1 = System.currentTimeMillis();
-        System.out.println("命中缓存 运行耗时: " + (end1 - start1) + "ms");
+        Caller<List<String>> caller = new Caller<>();
+        List<String> result = caller.callMethod("findPrimes", 1000000);
+
+        Caller<String> callerNative = new Caller<>("127.0.0.1", 18233);
+        String added = callerNative.callMethod(true, "add", 2, 3);
+        System.out.println(added);
     }
 
     public static void init(String... packageName) {
@@ -43,9 +40,7 @@ public class InitLocall {
     }
 
     private synchronized static void verifyInit() {
-        if (isInit) {
-            throw new RepeatInitializeException();
-        }
+        if (isInit) throw new RepeatInitializeException();
         isInit = true;
     }
 
@@ -59,7 +54,6 @@ public class InitLocall {
         AnnotationProcessor processor = new AnnotationProcessor(LocallCache.class);
         List<Method> methodList = processor.getAnnotatedMethods(packageName);
         methodList.forEach(method -> callCache.addLocallCachedMethod(method.getName()));
-        methodList.forEach(method -> log.info("Locall cache method: {}", method.getName()));
     }
 
 }

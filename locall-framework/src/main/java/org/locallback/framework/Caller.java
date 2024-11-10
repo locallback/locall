@@ -3,10 +3,13 @@ package org.locallback.framework;
 import org.locallback.common.config.LocallConfig;
 import org.locallback.common.enums.CacheEnum;
 import org.locallback.common.exception.MethodNotFindException;
+import org.locallback.natives.pipe.NativeCallBridge;
+import org.locallback.natives.pipe.NativeCallBridgeFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Objects;
 
 import static org.locallback.framework.CallCache.getCacheKey;
@@ -16,6 +19,8 @@ public class Caller<T> {
     private final LocallContext locallContext = LocallContext.getContext();
     private final CallCache callCache = CallCache.getInstance();
     private final Type returnType;
+    private String ip = LocallConfig.ip;
+    private int port = LocallConfig.port;
 
     public Caller(TypeReference<T> typeReference) {
         this.returnType = typeReference.getType();
@@ -23,6 +28,16 @@ public class Caller<T> {
 
     public Caller() {
         returnType = null;
+    }
+
+    public Caller(String ip, int port) {
+        this.ip = ip;
+        this.port = port;
+        returnType = null;
+    }
+
+    public T callMethod(boolean isNative, String methodName, Object... args) {
+        return isNative ? callNativeMethod(methodName, args) : callMethod(methodName, args);
     }
 
     @SuppressWarnings("unchecked")
@@ -55,6 +70,16 @@ public class Caller<T> {
                  InstantiationException e) {
             throw new RuntimeException("Error invoking method: " + methodName, e);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public T callNativeMethod(String functionName, Object... args) {
+        NativeCallBridge nativeCallBridge = NativeCallBridgeFactory.create(ip, port);
+        String[] stringArgs = Arrays.stream(args)
+                .map(Object::toString)
+                .toArray(String[]::new);
+
+        return (T) nativeCallBridge.call(functionName, stringArgs);
     }
 
 }

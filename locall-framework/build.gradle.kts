@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":locall-common"))
     implementation(project(":locall-annotation"))
     implementation(project(":locall-interpreter"))
+    implementation(project(":locall-native"))
 
     implementation("io.github.classgraph:classgraph:4.8.177")
 
