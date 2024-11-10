@@ -18,6 +18,10 @@ public class AnnotationProcessor {
         this.annotation = annotation;
     }
 
+    public List<Method> getAnnotatedMethods(String... packageName) {
+        return getAnnotatedMethods(null, packageName);
+    }
+
     /**
      * 获取指定包中使用指定注解的所有方法
      *
@@ -36,7 +40,7 @@ public class AnnotationProcessor {
                 Class<?> clazz = classInfo.loadClass();
                 Arrays.stream(clazz.getDeclaredMethods())
                         .filter(method -> isIncludedAnnotation(annotation, clazz, method)
-                                && !isExcludedAnnotation(clazz, method))
+                                && !isExcludedAnnotation(annotation, method))
                         .filter(method -> filter == null || filter.test(method))
                         .forEach(method -> {
                             method.setAccessible(true);
@@ -50,10 +54,6 @@ public class AnnotationProcessor {
         return methods;
     }
 
-    public List<Method> getAnnotatedMethods(String... packageName) {
-        return getAnnotatedMethods(null, packageName);
-    }
-
     /**
      * 判断方法是否包含指定注解
      */
@@ -64,16 +64,20 @@ public class AnnotationProcessor {
     /**
      * 判断方法是否包含 @Exclude 注解, 并且 @Exclude 注解中指定的注解是否在方法或类上
      */
-    private boolean isExcludedAnnotation(Class<?> clazz, Method method) {
+    private boolean isExcludedAnnotation(Class<? extends Annotation> annotation, Method method) {
         Exclude exclude = method.getAnnotation(Exclude.class);
 
         if (exclude == null || exclude.annotation().length == 0) {
             return exclude != null;
         }
 
-        return Arrays.stream(exclude.annotation()).anyMatch(excludeAnnotation ->
-                method.isAnnotationPresent(excludeAnnotation) || clazz.isAnnotationPresent(excludeAnnotation)
-        );
+        for (Class<? extends Annotation> aClass : exclude.annotation()) {
+            if (aClass == annotation) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
