@@ -6,6 +6,7 @@ import org.locallback.common.exception.MethodNotFindException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Objects;
 
 import static org.locallback.framework.CallCache.getCacheKey;
@@ -14,6 +15,15 @@ public class Caller<T> {
 
     private final LocallContext locallContext = LocallContext.getContext();
     private final CallCache callCache = CallCache.getInstance();
+    private final Type returnType;
+
+    public Caller(TypeReference<T> typeReference) {
+        this.returnType = typeReference.getType();
+    }
+
+    public Caller() {
+        returnType = null;
+    }
 
     @SuppressWarnings("unchecked")
     public T callMethod(String methodName, Object... args) {
@@ -37,7 +47,9 @@ public class Caller<T> {
             if (LocallConfig.enableCallCache && isCacheMethod) {
                 callCache.put(getCacheKey(method, args), Objects.requireNonNullElse(result, CacheEnum.NULL));
             }
-
+            if (result != null && returnType != null && !((Class<?>) returnType).isInstance(result)) {
+                throw new ClassCastException("Return type mismatch, expected: " + returnType + ", now: " + result.getClass());
+            }
             return (T) result;
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException |
                  InstantiationException e) {
