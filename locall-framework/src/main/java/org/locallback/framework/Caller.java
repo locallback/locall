@@ -2,6 +2,7 @@ package org.locallback.framework;
 
 import org.locallback.common.config.LocallConfig;
 import org.locallback.common.enums.CacheEnum;
+import org.locallback.common.exception.MethodNotFindException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,6 +18,9 @@ public class Caller<T> {
     @SuppressWarnings("unchecked")
     public T callMethod(String methodName, Object... args) {
         Method method = locallContext.getMethod(methodName);
+        if (method == null) {
+            throw new MethodNotFindException("Method not found: " + methodName);
+        }
         // 存在性能问题，待优化
         boolean isCacheMethod = callCache.isLocallCachedMethod(methodName);
         if (LocallConfig.enableCallCache && isCacheMethod) {
