@@ -2,6 +2,7 @@ package org.locallback.framework;
 
 import org.locallback.common.config.LocallConfig;
 import org.locallback.common.enums.CacheEnum;
+import org.locallback.common.exception.LocallException;
 import org.locallback.common.exception.MethodNotFindException;
 import org.locallback.natives.pipe.NativeCallBridge;
 import org.locallback.natives.pipe.NativeCallBridgeFactory;
@@ -22,12 +23,12 @@ public class Caller<T> {
     private String ip = LocallConfig.ip;
     private int port = LocallConfig.port;
 
-    public Caller(TypeReference<T> typeReference) {
-        this.returnType = typeReference.getType();
-    }
-
     public Caller() {
         returnType = null;
+    }
+
+    public Caller(TypeReference<T> typeReference) {
+        this.returnType = typeReference.getType();
     }
 
     public Caller(String ip, int port) {
@@ -74,12 +75,15 @@ public class Caller<T> {
 
     @SuppressWarnings("unchecked")
     public T callNativeMethod(String functionName, Object... args) {
-        NativeCallBridge nativeCallBridge = NativeCallBridgeFactory.create(ip, port);
+        if (!LocallConfig.enableConnexus) {
+            throw new LocallException("Connexus is not enabled");
+        }
+        NativeCallBridge callBridge = NativeCallBridgeFactory.create(ip, port);
         String[] stringArgs = Arrays.stream(args)
                 .map(Object::toString)
                 .toArray(String[]::new);
 
-        return (T) nativeCallBridge.call(functionName, stringArgs);
+        return (T) callBridge.call(functionName, stringArgs);
     }
 
 }
