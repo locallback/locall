@@ -1,4 +1,4 @@
-package org.locallback.common;
+package org.locallback.common.utils;
 
 import org.locallback.common.enums.OSEnum;
 
