@@ -26,7 +26,7 @@ public class CallCache {
         return INSTANCE;
     }
 
-    public String getCacheKey(Method method, Object... args) {
+    public static String getCacheKey(Method method, Object... args) {
         return String.format(CACHE_KEY, method.getName(), Arrays.toString(args));
     }
 

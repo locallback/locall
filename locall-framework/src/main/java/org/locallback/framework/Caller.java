@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
+import static org.locallback.framework.CallCache.getCacheKey;
+
 public class Caller<T> {
 
     private final LocallContext locallContext = LocallContext.getContext();
@@ -18,7 +20,7 @@ public class Caller<T> {
         // 存在性能问题，待优化
         boolean isCacheMethod = callCache.isLocallCachedMethod(methodName);
         if (LocallConfig.enableCallCache && isCacheMethod) {
-            Object cacheValue = callCache.get(callCache.getCacheKey(method, args));
+            Object cacheValue = callCache.get(getCacheKey(method, args));
             if (cacheValue != null) {
                 if (cacheValue == CacheEnum.NULL) return null;
                 return (T) cacheValue;
@@ -29,7 +31,7 @@ public class Caller<T> {
             Object instance = method.getDeclaringClass().getDeclaredConstructor().newInstance();
             Object result = method.invoke(instance, args);
             if (LocallConfig.enableCallCache && isCacheMethod) {
-                callCache.put(callCache.getCacheKey(method, args), Objects.requireNonNullElse(result, CacheEnum.NULL));
+                callCache.put(getCacheKey(method, args), Objects.requireNonNullElse(result, CacheEnum.NULL));
             }
 
             return (T) result;
