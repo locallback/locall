@@ -20,10 +20,10 @@ public class Caller<T> {
     @SuppressWarnings("unchecked")
     public T callMethod(String methodName, Object... args) {
         Method method = locallContext.getMethod(methodName);
-        Object o = callCache.get(cacheKey(method, args));
-        if (o != null) {
-            if (o == CacheEnum.NULL) return null;
-            return (T) o;
+        Object cacheValue = callCache.get(cacheKey(method, args));
+        if (cacheValue != null) {
+            if (cacheValue == CacheEnum.NULL) return null;
+            return (T) cacheValue;
         }
 
         try {
