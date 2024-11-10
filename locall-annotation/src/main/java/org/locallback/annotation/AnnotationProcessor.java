@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class AnnotationProcessor {
 
@@ -23,7 +24,7 @@ public class AnnotationProcessor {
      * @param packageName package name
      * @return list of methods
      */
-    public List<Method> getAnnotatedMethods(String... packageName) {
+    public List<Method> getAnnotatedMethods(Predicate<Method> filter, String... packageName) {
         List<Method> methods = new ArrayList<>();
 
         try (ScanResult scanResult = new ClassGraph()
@@ -36,8 +37,11 @@ public class AnnotationProcessor {
                 Arrays.stream(clazz.getDeclaredMethods())
                         .filter(method -> isIncludedAnnotation(annotation, clazz, method)
                                 && !isExcludedAnnotation(clazz, method))
-                        .peek(method -> method.setAccessible(true))
-                        .forEach(methods::add);
+                        .filter(method -> filter == null || filter.test(method))
+                        .forEach(method -> {
+                            method.setAccessible(true);
+                            methods.add(method);
+                        });
             });
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -46,11 +50,20 @@ public class AnnotationProcessor {
         return methods;
     }
 
-    private boolean isIncludedAnnotation(Class<? extends Annotation> annotation, Class<?> clazz,
-                                         Method method) {
+    public List<Method> getAnnotatedMethods(String... packageName) {
+        return getAnnotatedMethods(null, packageName);
+    }
+
+    /**
+     * 判断方法是否包含指定注解
+     */
+    private boolean isIncludedAnnotation(Class<? extends Annotation> annotation, Class<?> clazz, Method method) {
         return clazz.isAnnotationPresent(annotation) || method.isAnnotationPresent(annotation);
     }
 
+    /**
+     * 判断方法是否包含 @Exclude 注解, 并且 @Exclude 注解中指定的注解是否在方法或类上
+     */
     private boolean isExcludedAnnotation(Class<?> clazz, Method method) {
         Exclude exclude = method.getAnnotation(Exclude.class);
 

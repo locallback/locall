@@ -5,14 +5,19 @@ public class LocallConfig {
     /**
      * 是否启用 Connexus, 默认不启用
      */
-    private boolean enableConnexus = false;
+    public static boolean enableConnexus = false;
 
-    public boolean isEnableConnexus() {
-        return enableConnexus;
+    /**
+     * 是否启用 CallCache, 默认不启用
+     */
+    public static boolean enableCallCache = false;
+
+    public static void enableCallCache() {
+        LocallConfig.enableCallCache = true;
     }
 
-    public void setEnableConnexus(boolean enableConnexus) {
-        this.enableConnexus = enableConnexus;
+    public static void enableConnexus() {
+        LocallConfig.enableConnexus = true;
     }
 
 }
