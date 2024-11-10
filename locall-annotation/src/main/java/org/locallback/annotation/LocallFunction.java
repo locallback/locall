@@ -10,6 +10,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LocallFunction {
 
-    String defaultParam() default "";
+    String[] defaultParams() default {};
+
+    boolean remoteFunction = false;
 
 }
