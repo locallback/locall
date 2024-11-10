@@ -29,12 +29,8 @@ public class LocallContext {
     /* 可用方法Map */
     private final Map<String, Method> availableMethodMap = new HashMap<>();
 
-    protected List<Method> getAvailableMethodList() {
-        return availableMethodList;
-    }
-
-    protected void setAvailableMethodList(List<Method> availableMethodList) {
-        availableMethodList.forEach(this::addAvailableMethod);
+    protected void registerAvailableMethodList(List<Method> availableMethodList) {
+        availableMethodList.forEach(this::registerAvailableMethod);
     }
 
     /**
@@ -43,7 +39,7 @@ public class LocallContext {
      *
      * @param method AvailableMethod
      */
-    protected void addAvailableMethod(Method method) {
+    protected void registerAvailableMethod(Method method) {
         synchronized (this) {
             availableMethodList.add(method);
             availableMethodMap.put(method.getName(), method);
@@ -59,6 +55,10 @@ public class LocallContext {
      */
     public Method getMethod(String fullMethodName) {
         return availableMethodMap.get(fullMethodName);
+    }
+
+    protected List<Method> getAvailableMethodList() {
+        return availableMethodList;
     }
 
 }

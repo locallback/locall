@@ -6,7 +6,6 @@ import org.locallback.annotation.AnnotationProcessor;
 import org.locallback.annotation.LocallFunction;
 import org.locallback.common.exception.RepeatInitializeException;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class InitLocall {
     private static void scanLocallFunctionAnnotation(String... packageName) {
         AnnotationProcessor annotationProcessor = new AnnotationProcessor(LocallFunction.class);
         List<Method> locallFunctionMethods = annotationProcessor.getAnnotatedMethods(packageName);
-        locallContext.setAvailableMethodList(locallFunctionMethods);
+        locallContext.registerAvailableMethodList(locallFunctionMethods);
     }
 
 }
