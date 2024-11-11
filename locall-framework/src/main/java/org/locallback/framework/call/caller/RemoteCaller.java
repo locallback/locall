@@ -16,8 +16,8 @@ public class RemoteCaller<T> implements Caller<T> {
     private final Type returnType;
 
     public RemoteCaller() {
-        this.ip = LocallConfig.ip;
-        this.port = LocallConfig.port;
+        this.ip = LocallConfig.getIp();
+        this.port = LocallConfig.getPort();
         this.returnType = null;
     }
 
@@ -28,8 +28,8 @@ public class RemoteCaller<T> implements Caller<T> {
     }
 
     public RemoteCaller(TypeReference<T> typeReference) {
-        this.ip = LocallConfig.ip;
-        this.port = LocallConfig.port;
+        this.ip = LocallConfig.getIp();
+        this.port = LocallConfig.getPort();
         this.returnType = typeReference.getType();
     }
 
@@ -42,7 +42,7 @@ public class RemoteCaller<T> implements Caller<T> {
     @Override
     @SuppressWarnings("unchecked")
     public T call(String functionName, Object... args) {
-        if (!LocallConfig.enableConnexus) {
+        if (!LocallConfig.isEnableConnexus()) {
             throw new LocallException("Connexus is not enabled");
         }
         NativeCallBridge callBridge = CallBridgeFactory.create(ip, port);

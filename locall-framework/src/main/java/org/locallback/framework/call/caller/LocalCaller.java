@@ -38,7 +38,7 @@ public class LocalCaller<T> implements Caller<T> {
         }
         // 可能存在性能问题，待优化
         boolean isCacheMethod = callCache.isLocallCachedMethod(methodName);
-        if (LocallConfig.enableCallCache && isCacheMethod) {
+        if (LocallConfig.isEnableCallCache() && isCacheMethod) {
             Object cacheValue = callCache.get(getCacheKey(method, args));
             if (cacheValue != null) {
                 if (cacheValue == CacheEnum.NULL) return null;
@@ -49,7 +49,7 @@ public class LocalCaller<T> implements Caller<T> {
         try {
             Object instance = method.getDeclaringClass().getDeclaredConstructor().newInstance();
             Object result = method.invoke(instance, args);
-            if (LocallConfig.enableCallCache && isCacheMethod) {
+            if (LocallConfig.isEnableCallCache() && isCacheMethod) {
                 callCache.put(getCacheKey(method, args), Objects.requireNonNullElse(result, CacheEnum.NULL));
             }
             if (result != null && returnType != null && !((Class<?>) returnType).isInstance(result)) {
