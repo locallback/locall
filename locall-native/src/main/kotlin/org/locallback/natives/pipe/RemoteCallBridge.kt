@@ -6,26 +6,26 @@ import org.apache.logging.log4j.Logger
 
 object CallBridgeFactory {
 
-    private val instances = mutableMapOf<Pair<String, Int>, NativeCallBridge>()
+    private val instances = mutableMapOf<Pair<String, Int>, RemoteCallBridge>()
 
     @JvmStatic
-    fun create(ip: String, port: Int): NativeCallBridge {
+    fun create(ip: String, port: Int): RemoteCallBridge {
         return instances.getOrPut(ip to port) {
-            NativeCallBridge.newInstance(ip, port)
+            RemoteCallBridge.newInstance(ip, port)
         }
     }
 
 }
 
-class NativeCallBridge private constructor(private val ip: String, private val port: Int) {
+class RemoteCallBridge private constructor(private val ip: String, private val port: Int) {
 
-    private val log: Logger = LogManager.getLogger("NativeCallBridge")
+    private val log: Logger = LogManager.getLogger("[RemoteCallBridge]")
     private val connexus: Connexus = Connexus(ip, port).also {
-        log.info("NativeCallBridge created, IP: $ip Port: $port")
+        log.info("RemoteCallBridge created, IP: $ip Port: $port")
     }
 
     companion object {
-        fun newInstance(ip: String, port: Int): NativeCallBridge = NativeCallBridge(ip, port)
+        fun newInstance(ip: String, port: Int): RemoteCallBridge = RemoteCallBridge(ip, port)
     }
 
     fun call(functionName: String, args: Array<out String>): String? {

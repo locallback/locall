@@ -4,7 +4,7 @@ import org.locallback.common.config.LocallConfig;
 import org.locallback.common.exception.LocallException;
 import org.locallback.framework.call.TypeReference;
 import org.locallback.natives.pipe.CallBridgeFactory;
-import org.locallback.natives.pipe.NativeCallBridge;
+import org.locallback.natives.pipe.RemoteCallBridge;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -45,7 +45,7 @@ public class RemoteCaller<T> implements Caller<T> {
         if (!LocallConfig.isEnableConnexus()) {
             throw new LocallException("Connexus is not enabled");
         }
-        NativeCallBridge callBridge = CallBridgeFactory.create(ip, port);
+        RemoteCallBridge callBridge = CallBridgeFactory.create(ip, port);
         String[] stringArgs = Arrays.stream(args)
                 .map(Object::toString)
                 .toArray(String[]::new);

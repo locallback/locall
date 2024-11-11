@@ -16,7 +16,7 @@ public class TestFramework {
         System.out.println(result);
         LocallConfig.enableConnexus();
         Caller<String> callerNative = new RemoteCaller<>("127.0.0.1", 18233);
-        String added = callerNative.call("add", 2, 3);
+        String added = callerNative.call("add", 2314325, 234523334);
         System.out.println(added);
     }
 }
