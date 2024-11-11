@@ -16,7 +16,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class Connexus(private val host: String, private val port: Int) : Closeable {
 
-    private val log: Logger = LogManager.getLogger("Connexus")
+    private val log: Logger = LogManager.getLogger("[Connexus]")
     private var socket: Socket? = null
     private var writer: BufferedWriter? = null
     private var reader: BufferedReader? = null

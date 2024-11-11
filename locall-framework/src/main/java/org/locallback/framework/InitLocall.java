@@ -14,7 +14,7 @@ import java.util.List;
 
 public class InitLocall {
 
-    private static final Logger log = LogManager.getLogger(InitLocall.class);
+    private static final Logger log = LogManager.getLogger("[InitLocall]");
 
     private static volatile boolean isInit = false;
     private static final LocallContext locallContext = LocallContext.getContext();
