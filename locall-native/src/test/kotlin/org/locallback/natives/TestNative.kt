@@ -1,12 +1,12 @@
 package org.locallback.natives
 
 import kotlinx.coroutines.*
-import org.locallback.natives.pipe.NativeCallBridgeFactory
+import org.locallback.natives.pipe.CallBridgeFactory
 import kotlin.random.Random
 
 fun main() = runBlocking {
 
-    val bridge1 = NativeCallBridgeFactory.create("127.0.0.1", 8081)
+    val bridge1 = CallBridgeFactory.create("127.0.0.1", 8081)
     val results = mutableListOf<String>()
     val times = mutableListOf<Long>()
 
@@ -33,7 +33,7 @@ fun main() = runBlocking {
     times.clear()
 //
 //    sleep(1000)
-//    val bridge2 = NativeCallBridgeFactory.create("127.0.0.1", 8082)
+//    val bridge2 = CallBridgeFactory.create("127.0.0.1", 8082)
 //
 //    repeat(10) {
 //        val arg1 = Random.nextInt(1, 100).toString()

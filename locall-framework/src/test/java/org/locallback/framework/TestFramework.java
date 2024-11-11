@@ -10,7 +10,7 @@ public class TestFramework {
         InitLocall.init("org.locallback");
         LocallConfig.enableCallCache();
         Caller<List<String>> caller = new Caller<>();
-        List<String> result = caller.callMethod("findPrimes", 1000000);
+        List<String> result = caller.callMethod("findPrimes", 10000);
         System.out.println(result);
 //        Caller<String> callerNative = new Caller<>("127.0.0.1", 18233);
 //        String added = callerNative.callMethod(true, "add", 2, 3);

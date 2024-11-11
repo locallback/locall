@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
-object NativeCallBridgeFactory {
+object CallBridgeFactory {
 
     private val instances = mutableMapOf<Pair<String, Int>, NativeCallBridge>()
 
