@@ -3,26 +3,38 @@ package org.locallback.framework;
 import org.locallback.annotation.Exclude;
 import org.locallback.annotation.LocallCache;
 import org.locallback.annotation.LocallFunction;
+import org.locallback.framework.entity.TestEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @LocallCache
 @LocallFunction
 public class TestClass {
 
-    public String test() {
-        return "test111111111111111111";
+    public void testVoidReturn() {
+        System.out.println("void return");
     }
 
-    public void test1(String a) {
-        System.out.println(a);
+    public void testParam(String params) {
+        System.out.println(params);
     }
 
-    public void test2() {
-        System.out.println("222222222");
+    public void testParams(String string, int number, List<String> list) {
+        System.out.println("string: " + string + ", number: " + number + ", list: " + list.toString());
     }
 
+    @Exclude(annotation = {LocallCache.class})
+    public List<Integer> testGenericsReturn(int number) {
+        return findPrimes(number);
+    }
+
+    public TestEntity testObjectReturn() {
+        return new TestEntity(1233, "test", List.of("elem0", "elem1"), Map.of("locallback.org", 123));
+    }
+
+    @Exclude(annotation = {LocallFunction.class})
     public static List<Integer> findPrimes(int limit) {
         List<Integer> primes = new ArrayList<>();
         for (int i = 2; i <= limit; i++) {
