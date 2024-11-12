@@ -1,5 +1,7 @@
 package org.locallback.framework.call.caller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.locallback.common.config.LocallConfig;
 import org.locallback.common.exception.LocallException;
 import org.locallback.framework.call.TypeReference;
@@ -10,6 +12,8 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 
 public class RemoteCaller<T> implements Caller<T> {
+
+    private static final Logger log = LogManager.getLogger("[RemoteCaller]");
 
     private final String ip;
     private final int port;
@@ -43,7 +47,8 @@ public class RemoteCaller<T> implements Caller<T> {
     @SuppressWarnings("unchecked")
     public T call(String functionName, Object... args) {
         if (!LocallConfig.isEnableConnexus()) {
-            throw new LocallException("Connexus is not enabled");
+            log.error("Connexus is not enabled.");
+            return null;
         }
         RemoteCallBridge callBridge = CallBridgeFactory.create(ip, port);
         String[] stringArgs = Arrays.stream(args)

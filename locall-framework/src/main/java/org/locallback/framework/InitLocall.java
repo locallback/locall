@@ -25,9 +25,11 @@ public class InitLocall {
 
     public static void init(String... packageName) {
         verifyInit();
+        long start = System.currentTimeMillis();
         scanLocallFunctionAnnotation(packageName);
         scanLocallCacheAnnotation(packageName);
-        log.info("Locall-framework initialization completed.");
+        long end = System.currentTimeMillis();
+        log.info("Locall-framework initialization completed in {} ms.", end - start);
     }
 
     private synchronized static void verifyInit() {
