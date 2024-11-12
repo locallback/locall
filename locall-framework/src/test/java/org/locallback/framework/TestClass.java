@@ -25,7 +25,7 @@ public class TestClass {
         System.out.println("string: " + string + ", number: " + number + ", list: " + list.toString());
     }
 
-    @Exclude(annotation = {LocallCache.class})
+    @Exclude(annotation = LocallCache.class)
     public List<Integer> testGenericsReturn(int number) {
         return findPrimes(number);
     }
