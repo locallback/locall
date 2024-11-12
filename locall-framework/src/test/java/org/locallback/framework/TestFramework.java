@@ -6,6 +6,9 @@ import org.locallback.framework.call.caller.Caller;
 import org.locallback.framework.call.caller.LocalCaller;
 import org.locallback.framework.call.caller.RemoteCaller;
 import org.locallback.framework.entity.TestEntity;
+import org.locallback.framework.executer.CodeExecuter;
+import org.locallback.framework.executer.Executer;
+import org.locallback.framework.executer.ShellExecuter;
 
 import java.util.List;
 
@@ -35,8 +38,24 @@ public class TestFramework {
 //        String added = callerNative.call("add", 2314325, 234523334);
 //        System.out.println(added);
 
-        Caller<String> autoCaller = new AutoCaller<>();
-        String autoResult = autoCaller.call("add", 2314325, 234523334);
-        System.out.println(autoResult);
+//        Caller<String> autoCaller = new AutoCaller<>();
+//        String autoResult = autoCaller.call("add", 2314325, 234523334);
+//        System.out.println(autoResult);
+
+        Executer executer = new ShellExecuter();
+        String result = executer.exec("ls -l");
+        System.out.println(result);
+
+        Executer codeExecuter = new CodeExecuter();
+
+        String code = """
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        System.out.println("Hello from in-line Java code!");
+                    }
+                }
+                """;
+        String codeResult = codeExecuter.exec(code);
+        System.out.println(codeResult);
     }
 }
