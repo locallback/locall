@@ -38,12 +38,13 @@ public class TestFramework {
 //        String added = callerNative.call("add", 2314325, 234523334);
 //        System.out.println(added);
 
-//        Caller<String> autoCaller = new AutoCaller<>();
-//        String autoResult = autoCaller.call("add", 2314325, 234523334);
-//        System.out.println(autoResult);
+        Caller<String> autoCaller = new AutoCaller<>();
+        String autoResult = autoCaller.call("add", 2314325, 234523334);
+        System.out.println("=============================================");
+        System.out.println(autoResult);
 
         Executer executer = new ShellExecuter();
-        String result = executer.exec("ls -l");
+        String result = executer.exec("pwd");
         System.out.println(result);
 
         Executer codeExecuter = new CodeExecuter();
