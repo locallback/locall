@@ -38,14 +38,14 @@ public class InitLocall {
     }
 
     private static void scanLocallFunctionAnnotation(String... packageName) {
-        AnnotationProcessor processor = new AnnotationProcessor(LocallFunction.class);
-        List<Method> methodList = processor.getAnnotatedMethods(packageName);
+        AnnotationProcessor processor = new AnnotationProcessor(LocallFunction.class, packageName);
+        List<Method> methodList = processor.getAnnotatedMethods();
         locallContext.registerAvailableMethodList(methodList);
     }
 
     private static void scanLocallCacheAnnotation(String... packageName) {
-        AnnotationProcessor processor = new AnnotationProcessor(LocallCache.class);
-        List<Method> methodList = processor.getAnnotatedMethods(packageName);
+        AnnotationProcessor processor = new AnnotationProcessor(LocallCache.class, packageName);
+        List<Method> methodList = processor.getAnnotatedMethods();
         methodList.forEach(method -> callCache.addLocallCachedMethod(method.getName()));
     }
 

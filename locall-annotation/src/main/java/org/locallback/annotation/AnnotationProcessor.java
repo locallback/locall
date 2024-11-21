@@ -12,10 +12,24 @@ import java.util.function.Predicate;
 
 public class AnnotationProcessor {
 
-    Class<? extends Annotation> annotation;
+    private final Class<? extends Annotation> annotation;
+
+    private String[] packageName;
 
     public AnnotationProcessor(Class<? extends Annotation> annotation) {
         this.annotation = annotation;
+    }
+
+    public AnnotationProcessor(Class<? extends Annotation> annotation, String... packageName) {
+        this.annotation = annotation;
+        this.packageName = packageName;
+    }
+
+    public List<Method> getAnnotatedMethods() {
+        if (packageName == null) {
+            throw new IllegalArgumentException("Package name cannot be null");
+        }
+        return getAnnotatedMethods(null, packageName);
     }
 
     public List<Method> getAnnotatedMethods(String... packageName) {
@@ -78,6 +92,10 @@ public class AnnotationProcessor {
         /* 若存在参数，则判断是否包含指定注解 */
         return Arrays.stream(exclude.annotation())
                 .anyMatch(aClass -> aClass == annotation);
+    }
+
+    public void setPackageName(String... packageName) {
+        this.packageName = packageName;
     }
 
 }
